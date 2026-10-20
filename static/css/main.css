@@ -553,46 +553,59 @@ pre code {
   border-radius: 0;
 }
 
-/* Semantic syntax highlighting, rendered into index.html by tools/render_snippet.py */
+/* Semantic syntax highlighting, rendered into index.html by tools/render_snippet.py.
+   Colors follow the Light+ theme of Cursor/VS Code and its default bracket pair colors. */
+#usage-code {
+  color: #000000;
+  background-color: #FFFFFF;
+}
+
+.tok-control {
+  color: #AF00DB;
+}
+
 .tok-keyword {
-  color: #cf222e;
+  color: #0000FF;
 }
 
 .tok-type {
-  color: #267f99;
+  color: #267F99;
 }
 
 .tok-function {
-  color: #8250df;
+  color: #795E26;
+}
+
+.tok-variable {
+  color: #001080;
 }
 
 .tok-constant {
-  color: #953800;
+  color: #0070C1;
 }
 
 .tok-string {
-  color: #0a3069;
+  color: #A31515;
 }
 
 .tok-number {
-  color: #0550ae;
+  color: #098658;
 }
 
 .tok-comment {
-  color: #6e7781;
-  font-style: italic;
+  color: #008000;
 }
 
 .tok-bracket-0 {
-  color: #9a6700;
+  color: #0431FA;
 }
 
 .tok-bracket-1 {
-  color: #bf3989;
+  color: #319331;
 }
 
 .tok-bracket-2 {
-  color: #1a7f37;
+  color: #7B3814;
 }
 
 .citation-container {

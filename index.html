@@ -474,56 +474,56 @@
                 </svg>
               </button>
             </div>
-            <pre id="usage-code"><code class="language-python"><span class="tok-keyword">import</span> warp <span class="tok-keyword">as</span> <span class="tok-type">wp</span>
-<span class="tok-keyword">import</span> <span class="tok-type">newton</span>
+            <pre id="usage-code"><code class="language-python"><span class="tok-control">import</span> <span class="tok-type">warp</span> <span class="tok-control">as</span> <span class="tok-type">wp</span>
+<span class="tok-control">import</span> <span class="tok-type">newton</span>
 
 <span class="tok-comment"># Define a model builder and register solver-specific custom attributes</span>
-builder = <span class="tok-type">newton</span>.<span class="tok-type">ModelBuilder</span><span class="tok-bracket-0">(</span>up_axis=<span class="tok-type">newton</span>.<span class="tok-type">Axis</span>.<span class="tok-constant">Z</span><span class="tok-bracket-0">)</span>
-<span class="tok-type">newton</span>.<span class="tok-type">solvers</span>.<span class="tok-type">SolverKamino</span>.<span class="tok-function">register_custom_attributes</span><span class="tok-bracket-0">(</span>builder<span class="tok-bracket-0">)</span>
+<span class="tok-variable">builder</span> = <span class="tok-type">newton</span>.<span class="tok-type">ModelBuilder</span><span class="tok-bracket-0">(</span><span class="tok-variable">up_axis</span>=<span class="tok-type">newton</span>.<span class="tok-type">Axis</span>.<span class="tok-constant">Z</span><span class="tok-bracket-0">)</span>
+<span class="tok-type">newton</span>.<span class="tok-type">solvers</span>.<span class="tok-type">SolverKamino</span>.<span class="tok-function">register_custom_attributes</span><span class="tok-bracket-0">(</span><span class="tok-variable">builder</span><span class="tok-bracket-0">)</span>
 
 <span class="tok-comment"># Load the model from a USD file</span>
-asset_path = <span class="tok-type">newton</span>.<span class="tok-type">utils</span>.<span class="tok-function">download_asset</span><span class="tok-bracket-0">(</span><span class="tok-string">"disneyresearch"</span><span class="tok-bracket-0">)</span>
-asset_file = <span class="tok-type">str</span><span class="tok-bracket-0">(</span>asset_path / <span class="tok-string">"dr_legs/usd/dr_legs_with_meshes_and_boxes.usda"</span><span class="tok-bracket-0">)</span>
-builder.<span class="tok-function">add_usd</span><span class="tok-bracket-0">(</span>
-    asset_file,
-    joint_ordering=<span class="tok-keyword">None</span>,
-    force_show_colliders=<span class="tok-keyword">True</span>,
-    force_position_velocity_actuation=<span class="tok-keyword">True</span>,
-    enable_self_collisions=<span class="tok-keyword">False</span>,
-    hide_collision_shapes=<span class="tok-keyword">True</span>,
+<span class="tok-variable">asset_path</span> = <span class="tok-type">newton</span>.<span class="tok-type">utils</span>.<span class="tok-function">download_asset</span><span class="tok-bracket-0">(</span><span class="tok-string">"disneyresearch"</span><span class="tok-bracket-0">)</span>
+<span class="tok-variable">asset_file</span> = <span class="tok-type">str</span><span class="tok-bracket-0">(</span><span class="tok-variable">asset_path</span> / <span class="tok-string">"dr_legs/usd/dr_legs_with_meshes_and_boxes.usda"</span><span class="tok-bracket-0">)</span>
+<span class="tok-variable">builder</span>.<span class="tok-function">add_usd</span><span class="tok-bracket-0">(</span>
+    <span class="tok-variable">asset_file</span>,
+    <span class="tok-variable">joint_ordering</span>=<span class="tok-keyword">None</span>,
+    <span class="tok-variable">force_show_colliders</span>=<span class="tok-keyword">True</span>,
+    <span class="tok-variable">force_position_velocity_actuation</span>=<span class="tok-keyword">True</span>,
+    <span class="tok-variable">enable_self_collisions</span>=<span class="tok-keyword">False</span>,
+    <span class="tok-variable">hide_collision_shapes</span>=<span class="tok-keyword">True</span>,
 <span class="tok-bracket-0">)</span>
 
 <span class="tok-comment"># Add a global ground plane applied to all worlds</span>
-builder.<span class="tok-function">add_ground_plane</span><span class="tok-bracket-0">(</span><span class="tok-bracket-0">)</span>
+<span class="tok-variable">builder</span>.<span class="tok-function">add_ground_plane</span><span class="tok-bracket-0">(</span><span class="tok-bracket-0">)</span>
 
 <span class="tok-comment"># Create the model, skipping joint validation to allow for kinematic loops</span>
-model = builder.<span class="tok-function">finalize</span><span class="tok-bracket-0">(</span>skip_validation_joints=<span class="tok-keyword">True</span><span class="tok-bracket-0">)</span>
+<span class="tok-variable">model</span> = <span class="tok-variable">builder</span>.<span class="tok-function">finalize</span><span class="tok-bracket-0">(</span><span class="tok-variable">skip_validation_joints</span>=<span class="tok-keyword">True</span><span class="tok-bracket-0">)</span>
 
 <span class="tok-comment"># Create the Kamino solver for the given model</span>
-config = <span class="tok-type">newton</span>.<span class="tok-type">solvers</span>.<span class="tok-type">SolverKamino</span>.<span class="tok-type">Config</span>.<span class="tok-function">from_model</span><span class="tok-bracket-0">(</span>model<span class="tok-bracket-0">)</span>
-solver = <span class="tok-type">newton</span>.<span class="tok-type">solvers</span>.<span class="tok-type">SolverKamino</span><span class="tok-bracket-0">(</span>model, config=config<span class="tok-bracket-0">)</span>
+<span class="tok-variable">config</span> = <span class="tok-type">newton</span>.<span class="tok-type">solvers</span>.<span class="tok-type">SolverKamino</span>.<span class="tok-type">Config</span>.<span class="tok-function">from_model</span><span class="tok-bracket-0">(</span><span class="tok-variable">model</span><span class="tok-bracket-0">)</span>
+<span class="tok-variable">solver</span> = <span class="tok-type">newton</span>.<span class="tok-type">solvers</span>.<span class="tok-type">SolverKamino</span><span class="tok-bracket-0">(</span><span class="tok-variable">model</span>, <span class="tok-variable">config</span>=<span class="tok-variable">config</span><span class="tok-bracket-0">)</span>
 
 <span class="tok-comment"># Create state, control, and contact data containers</span>
-state_0 = model.<span class="tok-function">state</span><span class="tok-bracket-0">(</span><span class="tok-bracket-0">)</span>
-state_1 = model.<span class="tok-function">state</span><span class="tok-bracket-0">(</span><span class="tok-bracket-0">)</span>
-control = model.<span class="tok-function">control</span><span class="tok-bracket-0">(</span><span class="tok-bracket-0">)</span>
-collision_pipeline = <span class="tok-type">newton</span>.<span class="tok-type">CollisionPipeline</span><span class="tok-bracket-0">(</span>model<span class="tok-bracket-0">)</span>
-contacts = collision_pipeline.<span class="tok-function">contacts</span><span class="tok-bracket-0">(</span><span class="tok-bracket-0">)</span>
+<span class="tok-variable">state_0</span> = <span class="tok-variable">model</span>.<span class="tok-function">state</span><span class="tok-bracket-0">(</span><span class="tok-bracket-0">)</span>
+<span class="tok-variable">state_1</span> = <span class="tok-variable">model</span>.<span class="tok-function">state</span><span class="tok-bracket-0">(</span><span class="tok-bracket-0">)</span>
+<span class="tok-variable">control</span> = <span class="tok-variable">model</span>.<span class="tok-function">control</span><span class="tok-bracket-0">(</span><span class="tok-bracket-0">)</span>
+<span class="tok-variable">collision_pipeline</span> = <span class="tok-type">newton</span>.<span class="tok-type">CollisionPipeline</span><span class="tok-bracket-0">(</span><span class="tok-variable">model</span><span class="tok-bracket-0">)</span>
+<span class="tok-variable">contacts</span> = <span class="tok-variable">collision_pipeline</span>.<span class="tok-function">contacts</span><span class="tok-bracket-0">(</span><span class="tok-bracket-0">)</span>
 
 <span class="tok-comment"># Reset the state to a valid initial configuration above the ground plane</span>
-base_q = <span class="tok-type">wp</span>.<span class="tok-type">array</span><span class="tok-bracket-0">(</span><span class="tok-bracket-1">[</span><span class="tok-type">wp</span>.<span class="tok-type">transformf</span><span class="tok-bracket-2">(</span><span class="tok-bracket-0">(</span><span class="tok-number">0.0</span>, <span class="tok-number">0.0</span>, <span class="tok-number">0.4</span><span class="tok-bracket-0">)</span>, <span class="tok-type">wp</span>.<span class="tok-function">quat_identity</span><span class="tok-bracket-0">(</span>dtype=<span class="tok-type">wp</span>.<span class="tok-type">float32</span><span class="tok-bracket-0">)</span><span class="tok-bracket-2">)</span><span class="tok-bracket-1">]</span>, dtype=<span class="tok-type">wp</span>.<span class="tok-type">transformf</span><span class="tok-bracket-0">)</span>
-reset_config = <span class="tok-type">newton</span>.<span class="tok-type">solvers</span>.<span class="tok-type">SolverKamino</span>.<span class="tok-type">ResetConfig</span><span class="tok-bracket-0">(</span>
-    base_pose=<span class="tok-type">newton</span>.<span class="tok-type">solvers</span>.<span class="tok-type">SolverKamino</span>.<span class="tok-type">ResetConfig</span>.<span class="tok-type">FromBaseQ</span><span class="tok-bracket-1">(</span>base_q=base_q<span class="tok-bracket-1">)</span>,
+<span class="tok-variable">base_q</span> = <span class="tok-type">wp</span>.<span class="tok-type">array</span><span class="tok-bracket-0">(</span><span class="tok-bracket-1">[</span><span class="tok-type">wp</span>.<span class="tok-type">transformf</span><span class="tok-bracket-2">(</span><span class="tok-bracket-0">(</span><span class="tok-number">0.0</span>, <span class="tok-number">0.0</span>, <span class="tok-number">0.4</span><span class="tok-bracket-0">)</span>, <span class="tok-type">wp</span>.<span class="tok-function">quat_identity</span><span class="tok-bracket-0">(</span><span class="tok-variable">dtype</span>=<span class="tok-type">wp</span>.<span class="tok-type">float32</span><span class="tok-bracket-0">)</span><span class="tok-bracket-2">)</span><span class="tok-bracket-1">]</span>, <span class="tok-variable">dtype</span>=<span class="tok-type">wp</span>.<span class="tok-type">transformf</span><span class="tok-bracket-0">)</span>
+<span class="tok-variable">reset_config</span> = <span class="tok-type">newton</span>.<span class="tok-type">solvers</span>.<span class="tok-type">SolverKamino</span>.<span class="tok-type">ResetConfig</span><span class="tok-bracket-0">(</span>
+    <span class="tok-variable">base_pose</span>=<span class="tok-type">newton</span>.<span class="tok-type">solvers</span>.<span class="tok-type">SolverKamino</span>.<span class="tok-type">ResetConfig</span>.<span class="tok-type">FromBaseQ</span><span class="tok-bracket-1">(</span><span class="tok-variable">base_q</span>=<span class="tok-variable">base_q</span><span class="tok-bracket-1">)</span>,
 <span class="tok-bracket-0">)</span>
-solver.<span class="tok-function">reset</span><span class="tok-bracket-0">(</span>state=state_0, config=reset_config<span class="tok-bracket-0">)</span>
+<span class="tok-variable">solver</span>.<span class="tok-function">reset</span><span class="tok-bracket-0">(</span><span class="tok-variable">state</span>=<span class="tok-variable">state_0</span>, <span class="tok-variable">config</span>=<span class="tok-variable">reset_config</span><span class="tok-bracket-0">)</span>
 
 <span class="tok-comment"># Run the simulation</span>
-sim_dt = <span class="tok-number">0.01</span>
-<span class="tok-keyword">for</span> _ <span class="tok-keyword">in</span> <span class="tok-type">range</span><span class="tok-bracket-0">(</span><span class="tok-number">1000</span><span class="tok-bracket-0">)</span>:
-    state_0.<span class="tok-function">clear_forces</span><span class="tok-bracket-0">(</span><span class="tok-bracket-0">)</span>
-    collision_pipeline.<span class="tok-function">collide</span><span class="tok-bracket-0">(</span>state_0, contacts<span class="tok-bracket-0">)</span>
-    solver.<span class="tok-function">step</span><span class="tok-bracket-0">(</span>state_0, state_1, control, contacts, sim_dt<span class="tok-bracket-0">)</span>
-    state_0, state_1 = state_1, state_0</code></pre>
+<span class="tok-variable">sim_dt</span> = <span class="tok-number">0.01</span>
+<span class="tok-control">for</span> <span class="tok-variable">_</span> <span class="tok-keyword">in</span> <span class="tok-type">range</span><span class="tok-bracket-0">(</span><span class="tok-number">1000</span><span class="tok-bracket-0">)</span>:
+    <span class="tok-variable">state_0</span>.<span class="tok-function">clear_forces</span><span class="tok-bracket-0">(</span><span class="tok-bracket-0">)</span>
+    <span class="tok-variable">collision_pipeline</span>.<span class="tok-function">collide</span><span class="tok-bracket-0">(</span><span class="tok-variable">state_0</span>, <span class="tok-variable">contacts</span><span class="tok-bracket-0">)</span>
+    <span class="tok-variable">solver</span>.<span class="tok-function">step</span><span class="tok-bracket-0">(</span><span class="tok-variable">state_0</span>, <span class="tok-variable">state_1</span>, <span class="tok-variable">control</span>, <span class="tok-variable">contacts</span>, <span class="tok-variable">sim_dt</span><span class="tok-bracket-0">)</span>
+    <span class="tok-variable">state_0</span>, <span class="tok-variable">state_1</span> = <span class="tok-variable">state_1</span>, <span class="tok-variable">state_0</span></code></pre>
           </div>
 
           <h3>Advanced Setup</h3>

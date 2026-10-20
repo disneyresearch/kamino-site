@@ -2,8 +2,10 @@
 
 Names are classified by importing the snippet's imports and resolving dotted
 attribute chains through introspection, so modules, classes and types,
-functions and methods, and constants are colored by what they actually are.
-Brackets are colored by nesting depth.
+functions and methods, constants, and variables are colored by what they
+actually are. Brackets are colored by nesting depth. Token categories follow
+the Python grammar scopes of the Light+ theme in Cursor/VS Code; the colors
+themselves live in static/css/main.css.
 
 Run from the site root with an environment that has Newton installed, e.g.:
 
@@ -40,12 +42,19 @@ STRING_TYPES = {tokenize.STRING} | {
     getattr(tokenize, name) for name in ("FSTRING_START", "FSTRING_MIDDLE", "FSTRING_END") if hasattr(tokenize, name)
 }
 SKIPPED_TYPES = {tokenize.NL, tokenize.NEWLINE, tokenize.COMMENT, tokenize.INDENT, tokenize.DEDENT, tokenize.ENDMARKER}
+# Keywords scoped as keyword.control.* by the Python grammar; all others
+# (def, class, lambda, True, in, and, ...) are storage, constant or operator scopes.
+CONTROL_KEYWORDS = {
+    "as", "assert", "async", "await", "break", "continue", "del", "elif", "else", "except", "finally",
+    "for", "from", "if", "import", "pass", "raise", "return", "try", "while", "with", "yield",
+}  # fmt: skip
 UNKNOWN = object()
 
 
-def collect_names(source: str) -> tuple[dict[str, object], set[str]]:
-    """Return the objects bound by import statements and the names assigned in the snippet."""
+def collect_names(source: str) -> tuple[dict[str, object], dict[str, object], set[str]]:
+    """Return the names bound by imports, the objects named in from-imports, and the names assigned in the snippet."""
     imported: dict[str, object] = {}
+    from_imported: dict[str, object] = {}
     assigned: set[str] = set()
     for node in ast.walk(ast.parse(source)):
         if isinstance(node, ast.Import):
@@ -59,42 +68,57 @@ def collect_names(source: str) -> tuple[dict[str, object], set[str]]:
         elif isinstance(node, ast.ImportFrom):
             module = importlib.import_module(node.module)
             for alias in node.names:
-                imported[alias.asname or alias.name] = getattr(module, alias.name)
+                obj = getattr(module, alias.name)
+                imported[alias.asname or alias.name] = obj
+                from_imported[alias.name] = obj
         elif isinstance(node, ast.Name) and isinstance(node.ctx, ast.Store):
             assigned.add(node.id)
-    return imported, assigned
+    return imported, from_imported, assigned
 
 
-def classify_object(obj: object) -> str | None:
+def classify_object(name: str, obj: object) -> str:
     if inspect.ismodule(obj) or inspect.isclass(obj):
         return "type"
     if isinstance(obj, enum.Enum):
         return "constant"
     if isinstance(obj, property):
-        return None
+        return "variable"
     if callable(obj):
         return "function"
-    return "constant"
+    return "constant" if name.isupper() else "variable"
 
 
-def classify_unknown(name: str, next_token: tokenize.TokenInfo | None) -> str | None:
+def classify_unknown(name: str, next_token: tokenize.TokenInfo | None) -> str:
     if next_token is not None and next_token.string == "(":
         return "function"
     if name.isupper():
         return "constant"
-    return None
+    return "variable"
 
 
-def classify_tokens(tokens: list[tokenize.TokenInfo], imported: dict[str, object], assigned: set[str]) -> list[str | None]:
+def classify_tokens(
+    tokens: list[tokenize.TokenInfo],
+    imported: dict[str, object],
+    from_imported: dict[str, object],
+    assigned: set[str],
+) -> list[str | None]:
     """Return the highlighting class of each token, or ``None`` for plain text."""
     classes: list[str | None] = [None] * len(tokens)
     resolved: dict[int, object] = {}
     significant = [i for i, tok in enumerate(tokens) if tok.type not in SKIPPED_TYPES]
     depth = 0
 
+    # First token of the logical line containing each token
+    statement_heads: dict[int, str] = {}
+    head = None
     for i, tok in enumerate(tokens):
         if tok.type == tokenize.COMMENT:
             classes[i] = "comment"
+        elif tok.type == tokenize.NEWLINE:
+            head = None
+        elif tok.type not in SKIPPED_TYPES:
+            head = tok.string if head is None else head
+            statement_heads[i] = head
 
     for k, i in enumerate(significant):
         tok = tokens[i]
@@ -115,7 +139,7 @@ def classify_tokens(tokens: list[tokenize.TokenInfo], imported: dict[str, object
         elif tok.type == tokenize.NAME:
             name = tok.string
             if keyword.iskeyword(name):
-                classes[i] = "keyword"
+                classes[i] = "control" if name in CONTROL_KEYWORDS else "keyword"
                 continue
             if prev is not None and prev.string == "def":
                 classes[i] = "function"
@@ -124,7 +148,12 @@ def classify_tokens(tokens: list[tokenize.TokenInfo], imported: dict[str, object
                 classes[i] = "type"
                 continue
             if depth > 0 and next_token is not None and next_token.string == "=":
-                continue  # Keyword argument name
+                classes[i] = "variable"  # Keyword argument name
+                continue
+            if statement_heads[i] in ("import", "from"):
+                obj = imported.get(name, from_imported.get(name, UNKNOWN))
+                classes[i] = "type" if obj is UNKNOWN else classify_object(name, obj)  # Unbound names are module paths
+                continue
 
             if prev is not None and prev.string == ".":
                 base = resolved.get(significant[k - 2], UNKNOWN) if prev2 is not None else UNKNOWN
@@ -135,16 +164,16 @@ def classify_tokens(tokens: list[tokenize.TokenInfo], imported: dict[str, object
                 obj = imported.get(name, getattr(builtins, name, UNKNOWN))
 
             resolved[i] = obj
-            classes[i] = classify_unknown(name, next_token) if obj is UNKNOWN else classify_object(obj)
+            classes[i] = classify_unknown(name, next_token) if obj is UNKNOWN else classify_object(name, obj)
 
     return classes
 
 
 def render(source: str) -> str:
     """Return the snippet as HTML with each highlighted token wrapped in a ``tok-*`` span."""
-    imported, assigned = collect_names(source)
+    imported, from_imported, assigned = collect_names(source)
     tokens = list(tokenize.generate_tokens(io.StringIO(source).readline))
-    classes = classify_tokens(tokens, imported, assigned)
+    classes = classify_tokens(tokens, imported, from_imported, assigned)
 
     line_offsets = [0]
     for line in source.splitlines(keepends=True):
