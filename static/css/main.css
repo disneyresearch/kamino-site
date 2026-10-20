@@ -443,6 +443,17 @@ li {
   object-fit: cover;
 }
 
+.video-container iframe {
+  width: 100%;
+  display: block;
+  aspect-ratio: 16 / 9;
+  border: 0;
+}
+
+.video-embed {
+  margin-top: var(--space-2xl);
+}
+
 .video-card {
   position: relative;
   border-radius: var(--border-radius-lg);
