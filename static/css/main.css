@@ -547,10 +547,12 @@ code {
   border-radius: var(--border-radius-sm);
 }
 
-pre code {
+pre code,
+pre code.hljs {
   padding: 0;
   background-color: transparent;
   border-radius: 0;
+  overflow-x: visible;
 }
 
 .citation-container {

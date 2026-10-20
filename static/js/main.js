@@ -7,6 +7,7 @@ import { initClipboard } from './modules/clipboard.js';
 import { initScrollAnimations } from './modules/scroll.js';
 import { initVideoControls } from './modules/video.js';
 import { initNavigation } from './modules/navigation.js';
+import { initHighlighting } from './modules/highlight.js';
 
 /**
  * Initialize all modules when DOM is ready
@@ -30,6 +31,10 @@ function init() {
     // Initialize navigation
     initNavigation();
     console.log('✓ Navigation initialized');
+
+    // Initialize syntax highlighting
+    initHighlighting();
+    console.log('✓ Syntax highlighting initialized');
 
     console.log('Kamino website ready!');
   } catch (error) {
