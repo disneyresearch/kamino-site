@@ -699,9 +699,9 @@ code {
 }
 
 /* ============================================
-   GitHub Gist Embed Overrides
+   Usage Code Snippet
    ============================================ */
-.gist-container {
+.usage-section .code-container {
   margin-block: var(--space-2xl);
 }
 

@@ -27,21 +27,6 @@
 
   <!-- Stylesheets -->
   <link rel="stylesheet" href="./static/css/main.css">
-
-  <!-- Gist Styling Override -->
-  <style type="text/css">
-    .gist .blob-code-inner {
-      font-size: 12px !important;
-    }
-
-    .gist,
-    .gist * {
-      -webkit-user-select: text !important;
-      -moz-user-select: text !important;
-      -ms-user-select: text !important;
-      user-select: text !important;
-    }
-  </style>
 </head>
 
 <body>
@@ -474,26 +459,71 @@
           <h3>Loading a model from USD</h3>
           <p>The simplest way to get started is to load a model from a USD file:</p>
 
-          <div class="gist-container">
-            <div class="code-container">
-              <div class="code-header">
-                <span class="code-label">Python Example</span>
-                <button class="copy-btn" data-copy-target="gist-embed-code" aria-label="Copy code">
-                  <svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 -960 960 960"
-                    width="18px" fill="#5f6368">
-                    <path
-                      d="M360-240q-33 0-56.5-23.5T280-320v-480q0-33 23.5-56.5T360-880h360q33 0 56.5 23.5T800-800v480q0-33-23.5-56.5T720-240H360Zm0-80h360v-480H360v480ZM200-80q-33 0-56.5-23.5T120-160v-560h80v560h440v80H200Zm160-240v-480 480Z" />
-                  </svg>
-                  <svg class="icon-check" xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 -960 960 960"
-                    width="18px" fill="#1e8e3e" style="display:none;">
-                    <path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z" />
-                  </svg>
-                </button>
-              </div>
+          <div class="code-container">
+            <div class="code-header">
+              <span class="code-label">Python Example</span>
+              <button class="copy-btn" data-copy-target="usage-code" aria-label="Copy code">
+                <svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 -960 960 960"
+                  width="18px" fill="#5f6368">
+                  <path
+                    d="M360-240q-33 0-56.5-23.5T280-320v-480q0-33 23.5-56.5T360-880h360q33 0 56.5 23.5T800-800v480q0-33-23.5-56.5T720-240H360Zm0-80h360v-480H360v480ZM200-80q-33 0-56.5-23.5T120-160v-560h80v560h440v80H200Zm160-240v-480 480Z" />
+                </svg>
+                <svg class="icon-check" xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 -960 960 960"
+                  width="18px" fill="#1e8e3e" style="display:none;">
+                  <path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z" />
+                </svg>
+              </button>
             </div>
-            <div id="gist-embed-code">
-              <script src="https://gist.github.com/vastsoun/ee140781582483eb3c0ae1e503465aec.js"></script>
-            </div>
+            <pre id="usage-code"><code class="language-python">import warp as wp
+import newton
+
+# Define a model builder and register solver-specific custom attributes
+builder = newton.ModelBuilder(up_axis=newton.Axis.Z)
+newton.solvers.SolverKamino.register_custom_attributes(builder)
+
+# Load the model from a USD file
+asset_path = newton.utils.download_asset("disneyresearch")
+asset_file = str(asset_path / "dr_legs/usd/dr_legs_with_meshes_and_boxes.usda")
+builder.add_usd(
+    asset_file,
+    joint_ordering=None,
+    force_show_colliders=True,
+    force_position_velocity_actuation=True,
+    enable_self_collisions=False,
+    hide_collision_shapes=True,
+)
+
+# Add a global ground plane applied to all worlds
+builder.add_ground_plane()
+
+# Create the model, skipping joint validation to allow for kinematic loops
+model = builder.finalize(skip_validation_joints=True)
+
+# Create the Kamino solver for the given model
+config = newton.solvers.SolverKamino.Config.from_model(model)
+solver = newton.solvers.SolverKamino(model, config=config)
+
+# Create state, control, and contact data containers
+state_0 = model.state()
+state_1 = model.state()
+control = model.control()
+collision_pipeline = newton.CollisionPipeline(model)
+contacts = collision_pipeline.contacts()
+
+# Reset the state to a valid initial configuration above the ground plane
+base_q = wp.array([wp.transformf((0.0, 0.0, 0.4), wp.quat_identity(dtype=wp.float32))], dtype=wp.transformf)
+reset_config = newton.solvers.SolverKamino.ResetConfig(
+    base_pose=newton.solvers.SolverKamino.ResetConfig.FromBaseQ(base_q=base_q),
+)
+solver.reset(state=state_0, config=reset_config)
+
+# Run the simulation
+sim_dt = 0.01
+for _ in range(1000):
+    state_0.clear_forces()
+    collision_pipeline.collide(state_0, contacts)
+    solver.step(state_0, state_1, control, contacts, sim_dt)
+    state_0, state_1 = state_1, state_0</code></pre>
           </div>
 
           <h3>Advanced Setup</h3>
