@@ -547,6 +547,12 @@ code {
   border-radius: var(--border-radius-sm);
 }
 
+pre code {
+  padding: 0;
+  background-color: transparent;
+  border-radius: 0;
+}
+
 .citation-container {
   background-color: var(--color-background);
   border: 1px solid var(--color-border);
