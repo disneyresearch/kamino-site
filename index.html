@@ -119,13 +119,7 @@
         <div class="content-narrow">
           <h2 id="abstract-heading" class="text-center">Abstract</h2>
           <p>
-            The Kamino simulation software is a GPU-accelerated physics solver designed for accurate simulation of complex
-            mechanical systems with kinematic loops, such as parallel manipulators, planar and spatial
-            linkages, and multi-limbed robots with coupled joints, without requiring simplified
-            approximations. Built on NVIDIA Warp and integrated into the open-source Newton physics
-            framework, the Kamino simulator enables large-scale reinforcement learning by running thousands of
-            parallel environments on a single GPU, including heterogeneous worlds where each
-            environment can contain a structurally different robot.
+            We present Kamino, a GPU-based physics solver for massively parallel simulations of heterogeneous highly-coupled mechanical systems. Implemented in Python using NVIDIA Warp and integrated into the Newton framework, it enables the application of data-driven methods, such as large-scale reinforcement learning, to complex robotic systems that exhibit strongly coupled kinematic and dynamic constraints such as kinematic loops. The latter are often circumvented by approximating the system's topology as a kinematic tree, and incorporating explicit loop-closure constraints or so-called mimic joints. Kamino aims at alleviating this burden by natively supporting these types of couplings. Moreover, Kamino supports heterogeneous worlds, allowing for batched simulation of structurally diverse robots on a single GPU. At its core lies a state-of-the-art constrained optimization algorithm based on ADMM, which computes constraint forces by solving the constrained rigid multi-body forward dynamics transcribed as a nonlinear complementarity problem. This leads to high-fidelity simulations that resolve contact dynamics without resorting to approximate models that simplify or convexify the problem. We demonstrate RL policy training on a biped with six nested kinematic loops, generating a feasible walking policy while simulating 4096 parallel environments on a single GPU.
           </p>
         </div>
       </div>
