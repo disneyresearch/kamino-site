@@ -25,14 +25,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
-  <!-- Syntax Highlighting -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.2/styles/github.min.css"
-    integrity="sha512-0aPQyyeZrWj9sCA46UlmWgKOP0mUipLQ6OZXu8l4IcAmD2u31EPEy9VcIMvl7SoAaKe8bLXZhYoMaE/in+gcgA=="
-    crossorigin="anonymous" referrerpolicy="no-referrer">
-  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.2/highlight.min.js"
-    integrity="sha512-VSPLUv/n1Bmn+4zoxBNwpuFAO3//79I0Aax/qHDx24R47vylPcc9PrHDCqlePwHnh3joiM7/YTQhcXyQAAxvPQ=="
-    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
   <!-- Stylesheets -->
   <link rel="stylesheet" href="./static/css/main.css">
 </head>
@@ -482,55 +474,55 @@
                 </svg>
               </button>
             </div>
-            <pre id="usage-code"><code class="language-python">import warp as wp
-import newton
+            <pre id="usage-code"><code class="language-python"><span class="tok-keyword">import</span> warp <span class="tok-keyword">as</span> <span class="tok-type">wp</span>
+<span class="tok-keyword">import</span> <span class="tok-type">newton</span>
 
-# Define a model builder and register solver-specific custom attributes
-builder = newton.ModelBuilder(up_axis=newton.Axis.Z)
-newton.solvers.SolverKamino.register_custom_attributes(builder)
+<span class="tok-comment"># Define a model builder and register solver-specific custom attributes</span>
+builder = <span class="tok-type">newton</span>.<span class="tok-type">ModelBuilder</span><span class="tok-bracket-0">(</span>up_axis=<span class="tok-type">newton</span>.<span class="tok-type">Axis</span>.<span class="tok-constant">Z</span><span class="tok-bracket-0">)</span>
+<span class="tok-type">newton</span>.<span class="tok-type">solvers</span>.<span class="tok-type">SolverKamino</span>.<span class="tok-function">register_custom_attributes</span><span class="tok-bracket-0">(</span>builder<span class="tok-bracket-0">)</span>
 
-# Load the model from a USD file
-asset_path = newton.utils.download_asset("disneyresearch")
-asset_file = str(asset_path / "dr_legs/usd/dr_legs_with_meshes_and_boxes.usda")
-builder.add_usd(
+<span class="tok-comment"># Load the model from a USD file</span>
+asset_path = <span class="tok-type">newton</span>.<span class="tok-type">utils</span>.<span class="tok-function">download_asset</span><span class="tok-bracket-0">(</span><span class="tok-string">"disneyresearch"</span><span class="tok-bracket-0">)</span>
+asset_file = <span class="tok-type">str</span><span class="tok-bracket-0">(</span>asset_path / <span class="tok-string">"dr_legs/usd/dr_legs_with_meshes_and_boxes.usda"</span><span class="tok-bracket-0">)</span>
+builder.<span class="tok-function">add_usd</span><span class="tok-bracket-0">(</span>
     asset_file,
-    joint_ordering=None,
-    force_show_colliders=True,
-    force_position_velocity_actuation=True,
-    enable_self_collisions=False,
-    hide_collision_shapes=True,
-)
+    joint_ordering=<span class="tok-keyword">None</span>,
+    force_show_colliders=<span class="tok-keyword">True</span>,
+    force_position_velocity_actuation=<span class="tok-keyword">True</span>,
+    enable_self_collisions=<span class="tok-keyword">False</span>,
+    hide_collision_shapes=<span class="tok-keyword">True</span>,
+<span class="tok-bracket-0">)</span>
 
-# Add a global ground plane applied to all worlds
-builder.add_ground_plane()
+<span class="tok-comment"># Add a global ground plane applied to all worlds</span>
+builder.<span class="tok-function">add_ground_plane</span><span class="tok-bracket-0">(</span><span class="tok-bracket-0">)</span>
 
-# Create the model, skipping joint validation to allow for kinematic loops
-model = builder.finalize(skip_validation_joints=True)
+<span class="tok-comment"># Create the model, skipping joint validation to allow for kinematic loops</span>
+model = builder.<span class="tok-function">finalize</span><span class="tok-bracket-0">(</span>skip_validation_joints=<span class="tok-keyword">True</span><span class="tok-bracket-0">)</span>
 
-# Create the Kamino solver for the given model
-config = newton.solvers.SolverKamino.Config.from_model(model)
-solver = newton.solvers.SolverKamino(model, config=config)
+<span class="tok-comment"># Create the Kamino solver for the given model</span>
+config = <span class="tok-type">newton</span>.<span class="tok-type">solvers</span>.<span class="tok-type">SolverKamino</span>.<span class="tok-type">Config</span>.<span class="tok-function">from_model</span><span class="tok-bracket-0">(</span>model<span class="tok-bracket-0">)</span>
+solver = <span class="tok-type">newton</span>.<span class="tok-type">solvers</span>.<span class="tok-type">SolverKamino</span><span class="tok-bracket-0">(</span>model, config=config<span class="tok-bracket-0">)</span>
 
-# Create state, control, and contact data containers
-state_0 = model.state()
-state_1 = model.state()
-control = model.control()
-collision_pipeline = newton.CollisionPipeline(model)
-contacts = collision_pipeline.contacts()
+<span class="tok-comment"># Create state, control, and contact data containers</span>
+state_0 = model.<span class="tok-function">state</span><span class="tok-bracket-0">(</span><span class="tok-bracket-0">)</span>
+state_1 = model.<span class="tok-function">state</span><span class="tok-bracket-0">(</span><span class="tok-bracket-0">)</span>
+control = model.<span class="tok-function">control</span><span class="tok-bracket-0">(</span><span class="tok-bracket-0">)</span>
+collision_pipeline = <span class="tok-type">newton</span>.<span class="tok-type">CollisionPipeline</span><span class="tok-bracket-0">(</span>model<span class="tok-bracket-0">)</span>
+contacts = collision_pipeline.<span class="tok-function">contacts</span><span class="tok-bracket-0">(</span><span class="tok-bracket-0">)</span>
 
-# Reset the state to a valid initial configuration above the ground plane
-base_q = wp.array([wp.transformf((0.0, 0.0, 0.4), wp.quat_identity(dtype=wp.float32))], dtype=wp.transformf)
-reset_config = newton.solvers.SolverKamino.ResetConfig(
-    base_pose=newton.solvers.SolverKamino.ResetConfig.FromBaseQ(base_q=base_q),
-)
-solver.reset(state=state_0, config=reset_config)
+<span class="tok-comment"># Reset the state to a valid initial configuration above the ground plane</span>
+base_q = <span class="tok-type">wp</span>.<span class="tok-type">array</span><span class="tok-bracket-0">(</span><span class="tok-bracket-1">[</span><span class="tok-type">wp</span>.<span class="tok-type">transformf</span><span class="tok-bracket-2">(</span><span class="tok-bracket-0">(</span><span class="tok-number">0.0</span>, <span class="tok-number">0.0</span>, <span class="tok-number">0.4</span><span class="tok-bracket-0">)</span>, <span class="tok-type">wp</span>.<span class="tok-function">quat_identity</span><span class="tok-bracket-0">(</span>dtype=<span class="tok-type">wp</span>.<span class="tok-type">float32</span><span class="tok-bracket-0">)</span><span class="tok-bracket-2">)</span><span class="tok-bracket-1">]</span>, dtype=<span class="tok-type">wp</span>.<span class="tok-type">transformf</span><span class="tok-bracket-0">)</span>
+reset_config = <span class="tok-type">newton</span>.<span class="tok-type">solvers</span>.<span class="tok-type">SolverKamino</span>.<span class="tok-type">ResetConfig</span><span class="tok-bracket-0">(</span>
+    base_pose=<span class="tok-type">newton</span>.<span class="tok-type">solvers</span>.<span class="tok-type">SolverKamino</span>.<span class="tok-type">ResetConfig</span>.<span class="tok-type">FromBaseQ</span><span class="tok-bracket-1">(</span>base_q=base_q<span class="tok-bracket-1">)</span>,
+<span class="tok-bracket-0">)</span>
+solver.<span class="tok-function">reset</span><span class="tok-bracket-0">(</span>state=state_0, config=reset_config<span class="tok-bracket-0">)</span>
 
-# Run the simulation
-sim_dt = 0.01
-for _ in range(1000):
-    state_0.clear_forces()
-    collision_pipeline.collide(state_0, contacts)
-    solver.step(state_0, state_1, control, contacts, sim_dt)
+<span class="tok-comment"># Run the simulation</span>
+sim_dt = <span class="tok-number">0.01</span>
+<span class="tok-keyword">for</span> _ <span class="tok-keyword">in</span> <span class="tok-type">range</span><span class="tok-bracket-0">(</span><span class="tok-number">1000</span><span class="tok-bracket-0">)</span>:
+    state_0.<span class="tok-function">clear_forces</span><span class="tok-bracket-0">(</span><span class="tok-bracket-0">)</span>
+    collision_pipeline.<span class="tok-function">collide</span><span class="tok-bracket-0">(</span>state_0, contacts<span class="tok-bracket-0">)</span>
+    solver.<span class="tok-function">step</span><span class="tok-bracket-0">(</span>state_0, state_1, control, contacts, sim_dt<span class="tok-bracket-0">)</span>
     state_0, state_1 = state_1, state_0</code></pre>
           </div>
 
@@ -557,12 +549,7 @@ for _ in range(1000):
         <div class="content-container">
           <h2 id="acknowledgements-heading">Acknowledgements</h2>
           <p>
-            The team thanks Sammy Christen, Josefine Klintberg, Espen Knoop and Luca Schwarzenbach at
-Disney Research for their contributions and feedback, Gilles Daviet, Eric Heiden, Miles Macklin,
-Gavriel State, Alain Denzler, Philipp Reist, Antoine Richard, Milad Rakhsha, Mohammad Moha-
-jerani, Adam Moravanszky, and Spencer Huang at NVIDIA for their collaboration on the Newton
-framework and code reviews, and Yuval Tassa and Erik Frey at Google DeepMind for insightful
-discussions throughout the development of this work.
+            The team thanks Sammy Christen, Josefine Klintberg, Espen Knoop and Luca Schwarzenbach at Disney Research for their contributions and feedback, Gilles Daviet, Eric Heiden, Miles Macklin, Gavriel State, Alain Denzler, Philipp Reist, Antoine Richard, Milad Rakhsha, Mohammad Mohajerani, Adam Moravanszky, and Spencer Huang at NVIDIA for their collaboration on the Newton framework and code reviews, and Yuval Tassa and Erik Frey at Google DeepMind for insightful discussions throughout the development of this work.
           </p>
         </div>
       </div>

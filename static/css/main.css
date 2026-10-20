@@ -547,12 +547,52 @@ code {
   border-radius: var(--border-radius-sm);
 }
 
-pre code,
-pre code.hljs {
+pre code {
   padding: 0;
   background-color: transparent;
   border-radius: 0;
-  overflow-x: visible;
+}
+
+/* Semantic syntax highlighting, rendered into index.html by tools/render_snippet.py */
+.tok-keyword {
+  color: #cf222e;
+}
+
+.tok-type {
+  color: #267f99;
+}
+
+.tok-function {
+  color: #8250df;
+}
+
+.tok-constant {
+  color: #953800;
+}
+
+.tok-string {
+  color: #0a3069;
+}
+
+.tok-number {
+  color: #0550ae;
+}
+
+.tok-comment {
+  color: #6e7781;
+  font-style: italic;
+}
+
+.tok-bracket-0 {
+  color: #9a6700;
+}
+
+.tok-bracket-1 {
+  color: #bf3989;
+}
+
+.tok-bracket-2 {
+  color: #1a7f37;
 }
 
 .citation-container {
