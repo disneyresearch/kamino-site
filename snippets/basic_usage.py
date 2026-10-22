@@ -10,8 +10,6 @@ asset_path = newton.utils.download_asset("disneyresearch")
 asset_file = str(asset_path / "dr_legs/usd/dr_legs_with_meshes_and_boxes.usda")
 builder.add_usd(
     asset_file,
-    joint_ordering=None,
-    force_show_colliders=True,
     force_position_velocity_actuation=True,
     enable_self_collisions=False,
     hide_collision_shapes=True,
@@ -21,7 +19,7 @@ builder.add_usd(
 builder.add_ground_plane()
 
 # Create the model, skipping joint validation to allow for kinematic loops
-model = builder.finalize(skip_validation_joints=True)
+model = builder.finalize()
 
 # Create the Kamino solver for the given model
 config = newton.solvers.SolverKamino.Config.from_model(model)

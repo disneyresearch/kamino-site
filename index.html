@@ -130,14 +130,13 @@
         <div class="content-container">
           <h2 id="overview-heading">Overview</h2>
           <p>
-            Simulating complex mechanical systems, such as multi-limb robots, is essential for development and testing,
-            especially when using deep reinforcement learning (RL).
-            Practitioners often face difficulties with highly coupled mechanical assemblies that contain intrinsic closed
-            kinematic loops, which are frequently used to transfer power more efficiently than serial chains.
-            Simulating these systems involves challenges such as ill-conditioning due to large mass ratios, redundant
-            constraints, and the need for accurate constraint satisfaction and stabilization.
-            Consequently, these kinematic complexities are often approximated by equivalent articulated systems, which
-            requires expertise and can increase the sim-to-real gap.
+            Simulation is essential for the development and testing of complex mechanical systems, such as multi-limb
+            robots, especially when using deep reinforcement learning (RL). Practitioners often face difficulties with
+            highly coupled mechanical assemblies that contain intrinsic closed kinematic loops, which are frequently
+            used to transfer power more efficiently than serial chains. Simulating these systems involves challenges
+            such as ill-conditioning due to large mass ratios, redundant constraints, and the need for accurate constraint
+            satisfaction and stabilization. Consequently, these kinematic complexities are often approximated by equivalent
+            articulated systems, which requires expertise and can increase the sim-to-real gap.
           </p>
 
           <!-- SVG Diagram -->
@@ -354,15 +353,14 @@
             The Kamino simulator is a solver backend within <a href="https://github.com/newton-physics/newton"
               target="_blank"><strong>NVIDIA Newton</strong></a>, an open-source framework for GPU-accelerated physics
             simulation.
-            Newton provides a common interface for multiple solver backends, and the Kamino simulator extends this with native
-            support for constrained multi-body systems with kinematic loops.
+            Newton provides a common interface for multiple solver backends, and Kamino extends
+            this with native support for constrained multi-body systems with kinematic loops.
           </p>
           <p>
-            For reinforcement learning workflows, integration with <a href="https://github.com/isaac-sim/IsaacLab"
-              target="_blank"><strong>Isaac Lab</strong></a>, NVIDIA's framework for robot learning, is planned and
-            will be available soon.
-            Isaac Lab will provide environment wrappers, task definitions, and training pipelines on top of Newton's
-            physics backends, enabling end-to-end RL training with the Kamino simulator.
+            For reinforcement learning workflows, Kamino is tightly integrated with <a href="https://github.com/isaac-sim/IsaacLab"
+              target="_blank"><strong>Isaac Lab</strong></a>, NVIDIA's framework for robot learning,
+            via support for Newton solvers as the physics simulation backends. Isaac Lab thus provides environment
+            wrappers, task definitions, and training pipelines, enabling end-to-end RL training with Kamino.
           </p>
         </div>
       </div>
@@ -455,13 +453,10 @@
       <div class="section-wrapper">
         <div class="content-container">
           <h2 id="usage-heading">Basic Usage</h2>
-
-          <h3>Loading a model from USD</h3>
           <p>The simplest way to get started is to load a model from a USD file:</p>
-
           <div class="code-container">
             <div class="code-header">
-              <span class="code-label">Python Example</span>
+              <span class="code-label">Example: DR Legs</span>
               <button class="copy-btn" data-copy-target="usage-code" aria-label="Copy code">
                 <svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 -960 960 960"
                   width="18px" fill="#5f6368">
@@ -486,8 +481,6 @@
 <span class="tok-variable">asset_file</span> = <span class="tok-type">str</span><span class="tok-bracket-0">(</span><span class="tok-variable">asset_path</span> / <span class="tok-string">"dr_legs/usd/dr_legs_with_meshes_and_boxes.usda"</span><span class="tok-bracket-0">)</span>
 <span class="tok-variable">builder</span>.<span class="tok-function">add_usd</span><span class="tok-bracket-0">(</span>
     <span class="tok-variable">asset_file</span>,
-    <span class="tok-variable">joint_ordering</span>=<span class="tok-keyword">None</span>,
-    <span class="tok-variable">force_show_colliders</span>=<span class="tok-keyword">True</span>,
     <span class="tok-variable">force_position_velocity_actuation</span>=<span class="tok-keyword">True</span>,
     <span class="tok-variable">enable_self_collisions</span>=<span class="tok-keyword">False</span>,
     <span class="tok-variable">hide_collision_shapes</span>=<span class="tok-keyword">True</span>,
@@ -497,7 +490,7 @@
 <span class="tok-variable">builder</span>.<span class="tok-function">add_ground_plane</span><span class="tok-bracket-0">(</span><span class="tok-bracket-0">)</span>
 
 <span class="tok-comment"># Create the model, skipping joint validation to allow for kinematic loops</span>
-<span class="tok-variable">model</span> = <span class="tok-variable">builder</span>.<span class="tok-function">finalize</span><span class="tok-bracket-0">(</span><span class="tok-variable">skip_validation_joints</span>=<span class="tok-keyword">True</span><span class="tok-bracket-0">)</span>
+<span class="tok-variable">model</span> = <span class="tok-variable">builder</span>.<span class="tok-function">finalize</span><span class="tok-bracket-0">(</span><span class="tok-bracket-0">)</span>
 
 <span class="tok-comment"># Create the Kamino solver for the given model</span>
 <span class="tok-variable">config</span> = <span class="tok-type">newton</span>.<span class="tok-type">solvers</span>.<span class="tok-type">SolverKamino</span>.<span class="tok-type">Config</span>.<span class="tok-function">from_model</span><span class="tok-bracket-0">(</span><span class="tok-variable">model</span><span class="tok-bracket-0">)</span>
