@@ -443,6 +443,17 @@ li {
   object-fit: cover;
 }
 
+.video-container iframe {
+  width: 100%;
+  display: block;
+  aspect-ratio: 16 / 9;
+  border: 0;
+}
+
+.video-embed {
+  margin-top: var(--space-2xl);
+}
+
 .video-card {
   position: relative;
   border-radius: var(--border-radius-lg);
@@ -534,6 +545,67 @@ code {
   background-color: var(--color-code-bg);
   padding: 0.125rem 0.25rem;
   border-radius: var(--border-radius-sm);
+}
+
+pre code {
+  padding: 0;
+  background-color: transparent;
+  border-radius: 0;
+}
+
+/* Semantic syntax highlighting, rendered into index.html by tools/render_snippet.py.
+   Colors follow the Light+ theme of Cursor/VS Code and its default bracket pair colors. */
+#usage-code {
+  color: #000000;
+  background-color: #FFFFFF;
+}
+
+.tok-control {
+  color: #AF00DB;
+}
+
+.tok-keyword {
+  color: #0000FF;
+}
+
+.tok-type {
+  color: #267F99;
+}
+
+.tok-function {
+  color: #795E26;
+}
+
+.tok-variable {
+  color: #001080;
+}
+
+.tok-constant {
+  color: #0070C1;
+}
+
+.tok-string {
+  color: #A31515;
+}
+
+.tok-number {
+  color: #098658;
+}
+
+.tok-comment {
+  color: #008000;
+}
+
+.tok-bracket-0 {
+  color: #0431FA;
+}
+
+.tok-bracket-1 {
+  color: #319331;
+}
+
+.tok-bracket-2 {
+  color: #7B3814;
 }
 
 .citation-container {
@@ -688,9 +760,9 @@ code {
 }
 
 /* ============================================
-   GitHub Gist Embed Overrides
+   Usage Code Snippet
    ============================================ */
-.gist-container {
+.usage-section .code-container {
   margin-block: var(--space-2xl);
 }
 

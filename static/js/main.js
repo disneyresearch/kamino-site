@@ -30,7 +30,6 @@ function init() {
     // Initialize navigation
     initNavigation();
     console.log('✓ Navigation initialized');
-
     console.log('Kamino website ready!');
   } catch (error) {
     console.error('Error initializing website:', error);

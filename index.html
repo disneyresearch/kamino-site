@@ -27,21 +27,6 @@
 
   <!-- Stylesheets -->
   <link rel="stylesheet" href="./static/css/main.css">
-
-  <!-- Gist Styling Override -->
-  <style type="text/css">
-    .gist .blob-code-inner {
-      font-size: 12px !important;
-    }
-
-    .gist,
-    .gist * {
-      -webkit-user-select: text !important;
-      -moz-user-select: text !important;
-      -ms-user-select: text !important;
-      user-select: text !important;
-    }
-  </style>
 </head>
 
 <body>
@@ -89,6 +74,12 @@
             <span><sup>2</sup>NVIDIA, Zurich</span>
           </div>
 
+          <!-- <div class="affiliations">
+            <span>Disney Research, Zurich</span>
+            &nbsp;&nbsp;&nbsp;
+            <span>NVIDIA, Zurich</span>
+          </div> -->
+
           <div class="publication-links">
             <a href="https://arxiv.org/abs/2603.16536" target="_blank" class="btn btn-primary"
               aria-label="View paper PDF">
@@ -113,13 +104,7 @@
         <div class="content-narrow">
           <h2 id="abstract-heading" class="text-center">Abstract</h2>
           <p>
-            The Kamino simulation software is a GPU-accelerated physics solver designed for accurate simulation of complex
-            mechanical systems with kinematic loops, such as parallel manipulators, planar and spatial
-            linkages, and multi-limbed robots with coupled joints, without requiring simplified
-            approximations. Built on NVIDIA Warp and integrated into the open-source Newton physics
-            framework, the Kamino simulator enables large-scale reinforcement learning by running thousands of
-            parallel environments on a single GPU, including heterogeneous worlds where each
-            environment can contain a structurally different robot.
+            We present Kamino, a GPU-based physics solver for massively parallel simulations of heterogeneous highly-coupled mechanical systems. Implemented in Python using NVIDIA Warp and integrated into the Newton framework, it enables the application of data-driven methods, such as large-scale reinforcement learning, to complex robotic systems that exhibit strongly coupled kinematic and dynamic constraints such as kinematic loops. The latter are often circumvented by approximating the system's topology as a kinematic tree, and incorporating explicit loop-closure constraints or so-called mimic joints. Kamino aims at alleviating this burden by natively supporting these types of couplings. Moreover, Kamino supports heterogeneous worlds, allowing for batched simulation of structurally diverse robots on a single GPU. At its core lies a state-of-the-art constrained optimization algorithm based on ADMM, which computes constraint forces by solving the constrained rigid multi-body forward dynamics transcribed as a nonlinear complementarity problem. This leads to high-fidelity simulations that resolve contact dynamics without resorting to approximate models that simplify or convexify the problem. We demonstrate RL policy training on a biped with six nested kinematic loops, generating a feasible walking policy while simulating 4096 parallel environments on a single GPU.
           </p>
         </div>
       </div>
@@ -145,14 +130,13 @@
         <div class="content-container">
           <h2 id="overview-heading">Overview</h2>
           <p>
-            Simulating complex mechanical systems, such as multi-limb robots, is essential for development and testing,
-            especially when using deep reinforcement learning (RL).
-            Practitioners often face difficulties with highly coupled mechanical assemblies that contain intrinsic closed
-            kinematic loops, which are frequently used to transfer power more efficiently than serial chains.
-            Simulating these systems involves challenges such as ill-conditioning due to large mass ratios, redundant
-            constraints, and the need for accurate constraint satisfaction and stabilization.
-            Consequently, these kinematic complexities are often approximated by equivalent articulated systems, which
-            requires expertise and can increase the sim-to-real gap.
+            Simulation is essential for the development and testing of complex mechanical systems, such as multi-limb
+            robots, especially when using deep reinforcement learning (RL). Practitioners often face difficulties with
+            highly coupled mechanical assemblies that contain intrinsic closed kinematic loops, which are frequently
+            used to transfer power more efficiently than serial chains. Simulating these systems involves challenges
+            such as ill-conditioning due to large mass ratios, redundant constraints, and the need for accurate constraint
+            satisfaction and stabilization. Consequently, these kinematic complexities are often approximated by equivalent
+            articulated systems, which requires expertise and can increase the sim-to-real gap.
           </p>
 
           <!-- SVG Diagram -->
@@ -313,6 +297,15 @@
             loop closure constraints. The Kamino simulator natively supports arbitrary joint topologies, including closed kinematic
             loops, enabling accurate simulation of complex mechanical assemblies.
           </p>
+
+          <!-- YouTube Video -->
+          <div class="video-container video-embed">
+            <iframe src="https://www.youtube-nocookie.com/embed/_eYarcC8D9Y"
+              title="Kamino: GPU-based Simulation of Rigid Multi-Body Physics with Kinematic Loops" loading="lazy"
+              referrerpolicy="strict-origin-when-cross-origin"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowfullscreen></iframe>
+          </div>
         </div>
       </div>
     </section>
@@ -360,15 +353,14 @@
             The Kamino simulator is a solver backend within <a href="https://github.com/newton-physics/newton"
               target="_blank"><strong>NVIDIA Newton</strong></a>, an open-source framework for GPU-accelerated physics
             simulation.
-            Newton provides a common interface for multiple solver backends, and the Kamino simulator extends this with native
-            support for constrained multi-body systems with kinematic loops.
+            Newton provides a common interface for multiple solver backends, and Kamino extends
+            this with native support for constrained multi-body systems with kinematic loops.
           </p>
           <p>
-            For reinforcement learning workflows, integration with <a href="https://github.com/isaac-sim/IsaacLab"
-              target="_blank"><strong>Isaac Lab</strong></a>, NVIDIA's framework for robot learning, is planned and
-            will be available soon.
-            Isaac Lab will provide environment wrappers, task definitions, and training pipelines on top of Newton's
-            physics backends, enabling end-to-end RL training with the Kamino simulator.
+            For reinforcement learning workflows, Kamino is tightly integrated with <a href="https://github.com/isaac-sim/IsaacLab"
+              target="_blank"><strong>Isaac Lab</strong></a>, NVIDIA's framework for robot learning,
+            via support for Newton solvers as the physics simulation backends. Isaac Lab provides environment
+            wrappers, task definitions, and training pipelines, enabling end-to-end RL training with Kamino.
           </p>
         </div>
       </div>
@@ -381,51 +373,51 @@
           <h2 id="examples-heading" class="gallery-section-title">Basic Examples</h2>
           <div class="gallery-grid">
             <!-- Example 1 -->
-            <a href="https://github.com/newton-physics/newton/tree/main/newton/_src/solvers/kamino/examples/sim/example_sim_basics_box_on_plane.py"
+            <a href="https://github.com/newton-physics/newton/blob/main/newton/_src/solvers/kamino/examples/sim/example_kamino_basic_box_on_plane.py"
               target="_blank" class="video-card">
               <video autoplay muted loop playsinline aria-label="Box on plane example">
                 <source src="./static/videos/examples_basics_box_on_plane.mp4" type="video/mp4">
               </video>
-              <div class="video-card-label">newton.kamino.examples.basics_box_on_plane</div>
+              <div class="video-card-label">kamino_basic_box_on_plane</div>
             </a>
 
             <!-- Example 2 -->
-            <a href="https://github.com/newton-physics/newton/tree/main/newton/_src/solvers/kamino/examples/sim/example_sim_basics_cartpole.py"
+            <a href="https://github.com/newton-physics/newton/blob/main/newton/_src/solvers/kamino/examples/sim/example_kamino_basic_cartpole.py"
               target="_blank" class="video-card">
               <video autoplay muted loop playsinline aria-label="Cart pole example">
                 <source src="./static/videos/examples_basics_cartpole.mp4" type="video/mp4">
               </video>
-              <div class="video-card-label">newton.kamino.examples.basics_cartpole</div>
+              <div class="video-card-label">kamino_basic_cartpole</div>
             </a>
 
             <!-- Example 3 -->
-            <a href="https://github.com/newton-physics/newton/tree/main/newton/_src/solvers/kamino/examples/sim/example_sim_basics_boxes_fourbar.py"
+            <a href="https://github.com/newton-physics/newton/blob/main/newton/examples/kamino/example_kamino_basic_fourbar.py"
               target="_blank" class="video-card">
               <video autoplay muted loop playsinline aria-label="Four bar linkage example">
                 <source src="./static/videos/examples_basics_fourbar.mp4" type="video/mp4">
               </video>
-              <div class="video-card-label">newton.kamino.examples.basics_fourbar</div>
+              <div class="video-card-label">kamino_basic_fourbar</div>
             </a>
 
             <!-- Example 4 -->
-            <a href="https://github.com/newton-physics/newton/tree/main/newton/_src/solvers/kamino/examples/sim/example_sim_dr_testmech.py"
+            <a href="https://github.com/newton-physics/newton/blob/main/newton/examples/kamino/example_kamino_basic_dr_testmech.py"
               target="_blank" class="video-card">
               <video autoplay muted loop playsinline aria-label="DR test mechanism example">
                 <source src="./static/videos/examples_basics_dr_testmech.mp4" type="video/mp4">
               </video>
-              <div class="video-card-label">newton.kamino.examples.basics_dr_testmech</div>
+              <div class="video-card-label">kamino_basic_dr_testmech</div>
             </a>
           </div>
 
           <h2 class="gallery-section-title">Robot Examples</h2>
           <div class="gallery-grid">
             <!-- Robot 1 -->
-            <a href="https://github.com/newton-physics/newton/tree/main/newton/_src/solvers/kamino/examples/sim/example_sim_dr_legs.py"
+            <a href="https://github.com/newton-physics/newton/blob/main/newton/examples/kamino/example_kamino_robot_dr_legs.py"
               target="_blank" class="video-card">
               <video autoplay muted loop playsinline aria-label="DR legs robot example">
                 <source src="./static/videos/drlegs.mp4" type="video/mp4">
               </video>
-              <div class="video-card-label">newton.kamino.examples.robot_dr_legs</div>
+              <div class="video-card-label">kamino_robot_dr_legs</div>
             </a>
 
             <!-- Robot 2 -->
@@ -461,30 +453,70 @@
       <div class="section-wrapper">
         <div class="content-container">
           <h2 id="usage-heading">Basic Usage</h2>
-
-          <h3>Loading a model from USD</h3>
           <p>The simplest way to get started is to load a model from a USD file:</p>
+          <div class="code-container">
+            <div class="code-header">
+              <span class="code-label">Example: DR Legs</span>
+              <button class="copy-btn" data-copy-target="usage-code" aria-label="Copy code">
+                <svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 -960 960 960"
+                  width="18px" fill="#5f6368">
+                  <path
+                    d="M360-240q-33 0-56.5-23.5T280-320v-480q0-33 23.5-56.5T360-880h360q33 0 56.5 23.5T800-800v480q0-33-23.5-56.5T720-240H360Zm0-80h360v-480H360v480ZM200-80q-33 0-56.5-23.5T120-160v-560h80v560h440v80H200Zm160-240v-480 480Z" />
+                </svg>
+                <svg class="icon-check" xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 -960 960 960"
+                  width="18px" fill="#1e8e3e" style="display:none;">
+                  <path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z" />
+                </svg>
+              </button>
+            </div>
+            <pre id="usage-code"><code class="language-python"><span class="tok-control">import</span> <span class="tok-type">warp</span> <span class="tok-control">as</span> <span class="tok-type">wp</span>
+<span class="tok-control">import</span> <span class="tok-type">newton</span>
 
-          <div class="gist-container">
-            <div class="code-container">
-              <div class="code-header">
-                <span class="code-label">Python Example</span>
-                <button class="copy-btn" data-copy-target="gist-embed-code" aria-label="Copy code">
-                  <svg class="icon-copy" xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 -960 960 960"
-                    width="18px" fill="#5f6368">
-                    <path
-                      d="M360-240q-33 0-56.5-23.5T280-320v-480q0-33 23.5-56.5T360-880h360q33 0 56.5 23.5T800-800v480q0-33-23.5-56.5T720-240H360Zm0-80h360v-480H360v480ZM200-80q-33 0-56.5-23.5T120-160v-560h80v560h440v80H200Zm160-240v-480 480Z" />
-                  </svg>
-                  <svg class="icon-check" xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 -960 960 960"
-                    width="18px" fill="#1e8e3e" style="display:none;">
-                    <path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z" />
-                  </svg>
-                </button>
-              </div>
-            </div>
-            <div id="gist-embed-code">
-              <script src="https://gist.github.com/vastsoun/ee140781582483eb3c0ae1e503465aec.js"></script>
-            </div>
+<span class="tok-comment"># Define a model builder and register solver-specific custom attributes</span>
+<span class="tok-variable">builder</span> = <span class="tok-type">newton</span>.<span class="tok-type">ModelBuilder</span><span class="tok-bracket-0">(</span><span class="tok-variable">up_axis</span>=<span class="tok-type">newton</span>.<span class="tok-type">Axis</span>.<span class="tok-constant">Z</span><span class="tok-bracket-0">)</span>
+<span class="tok-type">newton</span>.<span class="tok-type">solvers</span>.<span class="tok-type">SolverKamino</span>.<span class="tok-function">register_custom_attributes</span><span class="tok-bracket-0">(</span><span class="tok-variable">builder</span><span class="tok-bracket-0">)</span>
+
+<span class="tok-comment"># Load the model from a USD file</span>
+<span class="tok-variable">asset_path</span> = <span class="tok-type">newton</span>.<span class="tok-type">utils</span>.<span class="tok-function">download_asset</span><span class="tok-bracket-0">(</span><span class="tok-string">"disneyresearch"</span><span class="tok-bracket-0">)</span>
+<span class="tok-variable">asset_file</span> = <span class="tok-type">str</span><span class="tok-bracket-0">(</span><span class="tok-variable">asset_path</span> / <span class="tok-string">"dr_legs/usd/dr_legs_with_meshes_and_boxes.usda"</span><span class="tok-bracket-0">)</span>
+<span class="tok-variable">builder</span>.<span class="tok-function">add_usd</span><span class="tok-bracket-0">(</span>
+    <span class="tok-variable">asset_file</span>,
+    <span class="tok-variable">force_position_velocity_actuation</span>=<span class="tok-keyword">True</span>,
+    <span class="tok-variable">enable_self_collisions</span>=<span class="tok-keyword">False</span>,
+    <span class="tok-variable">hide_collision_shapes</span>=<span class="tok-keyword">True</span>,
+<span class="tok-bracket-0">)</span>
+
+<span class="tok-comment"># Add a global ground plane applied to all worlds</span>
+<span class="tok-variable">builder</span>.<span class="tok-function">add_ground_plane</span><span class="tok-bracket-0">(</span><span class="tok-bracket-0">)</span>
+
+<span class="tok-comment"># Create the model, skipping joint validation to allow for kinematic loops</span>
+<span class="tok-variable">model</span> = <span class="tok-variable">builder</span>.<span class="tok-function">finalize</span><span class="tok-bracket-0">(</span><span class="tok-bracket-0">)</span>
+
+<span class="tok-comment"># Create the Kamino solver for the given model</span>
+<span class="tok-variable">config</span> = <span class="tok-type">newton</span>.<span class="tok-type">solvers</span>.<span class="tok-type">SolverKamino</span>.<span class="tok-type">Config</span>.<span class="tok-function">from_model</span><span class="tok-bracket-0">(</span><span class="tok-variable">model</span><span class="tok-bracket-0">)</span>
+<span class="tok-variable">solver</span> = <span class="tok-type">newton</span>.<span class="tok-type">solvers</span>.<span class="tok-type">SolverKamino</span><span class="tok-bracket-0">(</span><span class="tok-variable">model</span>, <span class="tok-variable">config</span>=<span class="tok-variable">config</span><span class="tok-bracket-0">)</span>
+
+<span class="tok-comment"># Create state, control, and contact data containers</span>
+<span class="tok-variable">state_0</span> = <span class="tok-variable">model</span>.<span class="tok-function">state</span><span class="tok-bracket-0">(</span><span class="tok-bracket-0">)</span>
+<span class="tok-variable">state_1</span> = <span class="tok-variable">model</span>.<span class="tok-function">state</span><span class="tok-bracket-0">(</span><span class="tok-bracket-0">)</span>
+<span class="tok-variable">control</span> = <span class="tok-variable">model</span>.<span class="tok-function">control</span><span class="tok-bracket-0">(</span><span class="tok-bracket-0">)</span>
+<span class="tok-variable">collision_pipeline</span> = <span class="tok-type">newton</span>.<span class="tok-type">CollisionPipeline</span><span class="tok-bracket-0">(</span><span class="tok-variable">model</span><span class="tok-bracket-0">)</span>
+<span class="tok-variable">contacts</span> = <span class="tok-variable">collision_pipeline</span>.<span class="tok-function">contacts</span><span class="tok-bracket-0">(</span><span class="tok-bracket-0">)</span>
+
+<span class="tok-comment"># Reset the state to a valid initial configuration above the ground plane</span>
+<span class="tok-variable">base_q</span> = <span class="tok-type">wp</span>.<span class="tok-type">array</span><span class="tok-bracket-0">(</span><span class="tok-bracket-1">[</span><span class="tok-type">wp</span>.<span class="tok-type">transformf</span><span class="tok-bracket-2">(</span><span class="tok-bracket-0">(</span><span class="tok-number">0.0</span>, <span class="tok-number">0.0</span>, <span class="tok-number">0.4</span><span class="tok-bracket-0">)</span>, <span class="tok-type">wp</span>.<span class="tok-function">quat_identity</span><span class="tok-bracket-0">(</span><span class="tok-variable">dtype</span>=<span class="tok-type">wp</span>.<span class="tok-type">float32</span><span class="tok-bracket-0">)</span><span class="tok-bracket-2">)</span><span class="tok-bracket-1">]</span>, <span class="tok-variable">dtype</span>=<span class="tok-type">wp</span>.<span class="tok-type">transformf</span><span class="tok-bracket-0">)</span>
+<span class="tok-variable">reset_config</span> = <span class="tok-type">newton</span>.<span class="tok-type">solvers</span>.<span class="tok-type">SolverKamino</span>.<span class="tok-type">ResetConfig</span><span class="tok-bracket-0">(</span>
+    <span class="tok-variable">base_pose</span>=<span class="tok-type">newton</span>.<span class="tok-type">solvers</span>.<span class="tok-type">SolverKamino</span>.<span class="tok-type">ResetConfig</span>.<span class="tok-type">FromBaseQ</span><span class="tok-bracket-1">(</span><span class="tok-variable">base_q</span>=<span class="tok-variable">base_q</span><span class="tok-bracket-1">)</span>,
+<span class="tok-bracket-0">)</span>
+<span class="tok-variable">solver</span>.<span class="tok-function">reset</span><span class="tok-bracket-0">(</span><span class="tok-variable">state</span>=<span class="tok-variable">state_0</span>, <span class="tok-variable">config</span>=<span class="tok-variable">reset_config</span><span class="tok-bracket-0">)</span>
+
+<span class="tok-comment"># Run the simulation</span>
+<span class="tok-variable">sim_dt</span> = <span class="tok-number">0.01</span>
+<span class="tok-control">for</span> <span class="tok-variable">_</span> <span class="tok-keyword">in</span> <span class="tok-type">range</span><span class="tok-bracket-0">(</span><span class="tok-number">1000</span><span class="tok-bracket-0">)</span>:
+    <span class="tok-variable">state_0</span>.<span class="tok-function">clear_forces</span><span class="tok-bracket-0">(</span><span class="tok-bracket-0">)</span>
+    <span class="tok-variable">collision_pipeline</span>.<span class="tok-function">collide</span><span class="tok-bracket-0">(</span><span class="tok-variable">state_0</span>, <span class="tok-variable">contacts</span><span class="tok-bracket-0">)</span>
+    <span class="tok-variable">solver</span>.<span class="tok-function">step</span><span class="tok-bracket-0">(</span><span class="tok-variable">state_0</span>, <span class="tok-variable">state_1</span>, <span class="tok-variable">control</span>, <span class="tok-variable">contacts</span>, <span class="tok-variable">sim_dt</span><span class="tok-bracket-0">)</span>
+    <span class="tok-variable">state_0</span>, <span class="tok-variable">state_1</span> = <span class="tok-variable">state_1</span>, <span class="tok-variable">state_0</span></code></pre>
           </div>
 
           <h3>Advanced Setup</h3>
@@ -492,11 +524,11 @@
           <ul>
             <li>All examples feature a multi-world setup with CUDA graph capture to speed up GPU-based computations.</li>
             <li>The <a
-                href="https://github.com/newton-physics/newton/tree/main/newton/_src/solvers/kamino/examples/newton/example_fourbar.py"
+                href="https://github.com/newton-physics/newton/blob/main/newton/examples/kamino/example_kamino_basic_fourbar.py"
                 target="_blank">fourbar example</a> shows how to use the simulation configuration to adapt simulation
               parameters.</li>
             <li>The <a
-                href="https://github.com/newton-physics/newton/tree/main/newton/_src/solvers/kamino/examples/sim/example_sim_dr_legs.py"
+                href="https://github.com/newton-physics/newton/blob/main/newton/examples/kamino/example_kamino_robot_dr_legs.py"
                 target="_blank">DR Legs example</a> sets up PID control to actively move the robot based on an input
               animation.</li>
           </ul>
@@ -510,12 +542,7 @@
         <div class="content-container">
           <h2 id="acknowledgements-heading">Acknowledgements</h2>
           <p>
-            The team thanks Sammy Christen, Josefine Klintberg, Espen Knoop and Luca Schwarzenbach at
-Disney Research for their contributions and feedback, Gilles Daviet, Eric Heiden, Miles Macklin,
-Gavriel State, Alain Denzler, Philipp Reist, Antoine Richard, Milad Rakhsha, Mohammad Moha-
-jerani, Adam Moravanszky, and Spencer Huang at NVIDIA for their collaboration on the Newton
-framework and code reviews, and Yuval Tassa and Erik Frey at Google DeepMind for insightful
-discussions throughout the development of this work.
+            The team thanks Sammy Christen, Josefine Klintberg, Espen Knoop and Luca Schwarzenbach at Disney Research for their contributions and feedback, Gilles Daviet, Eric Heiden, Miles Macklin, Gavriel State, Alain Denzler, Philipp Reist, Antoine Richard, Milad Rakhsha, Mohammad Mohajerani, Adam Moravanszky, and Spencer Huang at NVIDIA for their collaboration on the Newton framework and code reviews, and Yuval Tassa and Erik Frey at Google DeepMind for insightful discussions throughout the development of this work.
           </p>
         </div>
       </div>
@@ -525,10 +552,13 @@ discussions throughout the development of this work.
     <section id="citing" class="citations-section fade-in-section" aria-labelledby="citing-heading">
       <div class="section-wrapper">
         <div class="content-container">
-          <h2 id="citing-heading">Citing the Kamino Simulator</h2>
-          <p>If you use the Kamino simulator in your research, please cite the following papers:</p>
+          <h2 id="citing-heading">Citing Kamino</h2>
+          <p>If you use Kamino in your research, please cite the following papers:</p>
 
-          <p><strong>Kamino simulator system description:</strong> coming soon.</p>
+          <p><strong>Kamino in Newton:</strong> the GPU-based Kamino simulator and its integration into Newton,
+            published at <a href="https://openreview.net/forum?id=aKjXDWnmzc#discussion" target="_blank"
+              rel="noopener">CoRL 2026</a> and available as an <a href="https://arxiv.org/abs/2603.16536"
+              target="_blank" rel="noopener">arXiv pre-print</a>.</p>
           <div class="citation-container">
             <div class="citation-header">
               <span class="citation-title">BibTeX</span>
@@ -545,17 +575,19 @@ discussions throughout the development of this work.
               </button>
             </div>
             <div class="citation-content">
-              <pre id="bibtex-kamino">@article{tsounis2026kamino,
-      title={Kamino: GPU-based Massively Parallel Simulation of Multi-Body Systems with Challenging Topologies},
-      author={Vassilios Tsounis and Guirec Maloisel and Christian Schumacher and Ruben Grandia and Agon Serifi and David Müller and Chris Amevor and Tobias Widmer and Moritz Bächer},
-      year={2026},
-      eprint={2603.16536},
-      url={https://arxiv.org/abs/2603.16536},
-}</pre>
+              <pre id="bibtex-kamino">@inproceedings{tsounis2026kamino,
+    title={Kamino: {GPU}-based Simulation of Rigid Multi-Body Physics with Kinematic Loops},
+    author={Vassilios Tsounis and Guirec Maloisel and Christian Schumacher and Ruben Grandia and Agon Serifi and David M{\"u}ller and Chris Amevor and Tobias Widmer and Moritz B{\"a}cher},
+    booktitle={10th Annual Conference on Robot Learning},
+    year={2026},
+    url={https://openreview.net/forum?id=aKjXDWnmzc}
+  }
+              </pre>
             </div>
           </div>
 
-          <p><strong>Algorithmic foundations:</strong> the core solver algorithm and its mathematical formulation.</p>
+          <p><strong>Foundations:</strong> the core solver algorithm and its mathematical formulation, described in
+            our <a href="https://arxiv.org/abs/2504.19771" target="_blank" rel="noopener">technical report</a>.</p>
           <div class="citation-container">
             <div class="citation-header">
               <span class="citation-title">BibTeX</span>
@@ -574,7 +606,7 @@ discussions throughout the development of this work.
             <div class="citation-content">
               <pre id="bibtex-algorithm">@article{tsounis2025solving,
   title={On Solving the Dynamics of Constrained Rigid Multi-Body Systems with Kinematic Loops},
-  author={Tsounis, Vassilios and Grandia, Ruben and B{\"a}cher, Moritz},
+  author={Vassilios Tsounis and Ruben Grandia and Moritz B{\"a}cher},
   journal={arXiv preprint arXiv:2504.19771},
   year={2025},
 }</pre>
